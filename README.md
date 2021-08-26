@@ -10,3 +10,5 @@ canvas boilerplate with
 2. Particle class
 3. Vector class
 4. Canvas class
+
+![screenshot](./screenshot.png)
