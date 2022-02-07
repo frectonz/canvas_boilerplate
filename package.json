@@ -1,0 +1,15 @@
+{
+  "name": "canvas_boilerplate",
+  "version": "0.0.1",
+  "description": "A canvas boilerplate for future projects",
+  "private": true,
+  "scripts": {
+    "live": "live-server ./dist"
+  },
+  "repository": "https://github.com/fraol0912/canvas_boilerplate.git",
+  "author": "Fraol Lemecha",
+  "license": "MIT",
+  "dependencies": {
+    "live-server": "^1.2.1"
+  }
+}
