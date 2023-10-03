@@ -1,4 +1,4 @@
-function randomNumBetween(min, max) {
+function randomNumBetween(min: number, max: number) {
   return min + Math.random() * (max - min);
 }
 
@@ -8,24 +8,27 @@ function randomColor() {
 }
 
 class Vector {
-  constructor(x, y) {
+  constructor(
+    public x: number,
+    public y: number,
+  ) {
     this.x = x;
     this.y = y;
   }
 
-  static add(vector1, vector2) {
+  static add(vector1: Vector, vector2: Vector) {
     return new Vector(vector1.x + vector2.x, vector1.y + vector2.y);
   }
 
-  static sub(vector1, vector2) {
+  static sub(vector1: Vector, vector2: Vector) {
     return new Vector(vector1.x - vector2.x, vector1.y - vector2.y);
   }
 
-  static mult(vector, scalar) {
+  static mult(vector: Vector, scalar: number) {
     return new Vector(vector.x * scalar, vector.y * scalar);
   }
 
-  static div(vector, scalar) {
+  static div(vector: Vector, scalar: number) {
     return new Vector(vector.x / scalar, vector.y / scalar);
   }
 
@@ -33,9 +36,10 @@ class Vector {
     return new Vector(this.x, this.y);
   }
 
-  dot(vector) {
+  dot(vector: Vector) {
     return this.x * vector.x + this.y * vector.y;
   }
+
   mag() {
     return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
   }
@@ -44,16 +48,21 @@ class Vector {
     return new Vector(-this.y, this.x);
   }
 
-  static random(minX, maxX, minY, maxY) {
+  static random(minX: number, maxX: number, minY: number, maxY: number) {
     return new Vector(
       randomNumBetween(minX, maxX),
-      randomNumBetween(minY, maxY)
+      randomNumBetween(minY, maxY),
     );
   }
 }
 
 class Particle {
-  constructor(x, y) {
+  public pos: Vector;
+  private vel: Vector;
+  private acc: Vector;
+  public radius: number;
+
+  constructor(x: number, y: number) {
     this.pos = new Vector(x, y);
     this.vel = Vector.random(-1, 1, -1, 1);
     this.acc = new Vector(0, 0);
@@ -66,7 +75,7 @@ class Particle {
     this.acc = Vector.mult(this.acc, 0);
   }
 
-  handleEdges(width, height) {
+  handleEdges(width: number, height: number) {
     if (this.pos.x - this.radius <= 0 || this.pos.x + this.radius >= width) {
       this.vel.x *= -1;
     }
@@ -75,9 +84,10 @@ class Particle {
     }
   }
 
-  checkCollision(particle) {
+  checkCollision(particle: Particle) {
     const v = Vector.sub(this.pos, particle.pos);
     const d = v.mag();
+
     if (d <= this.radius + particle.radius) {
       const unitNormal = Vector.div(v, d);
       const unitTangent = unitNormal.getTangent();
@@ -115,9 +125,14 @@ class Particle {
 }
 
 class Canvas {
+  private canvas: HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D;
+
+  private particles: Particle[];
+
   constructor() {
     this.canvas = document.createElement("canvas");
-    this.ctx = this.canvas.getContext("2d");
+    this.ctx = this.canvas.getContext("2d")!;
 
     document.body.append(this.canvas);
 
@@ -137,8 +152,8 @@ class Canvas {
       this.particles.push(
         new Particle(
           randomNumBetween(50, this.canvas.width - 50),
-          randomNumBetween(50, this.canvas.height - 50)
-        )
+          randomNumBetween(50, this.canvas.height - 50),
+        ),
       );
     }
   }
@@ -163,7 +178,7 @@ class Canvas {
         particle.pos.y,
         particle.radius,
         0,
-        2 * Math.PI
+        2 * Math.PI,
       );
       this.ctx.fill();
       this.ctx.closePath();
